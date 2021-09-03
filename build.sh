@@ -16,21 +16,18 @@ build_main(){
     [ -f "bin/$target_name.7z" ] && return 0
     [ -f "bin/$target_name.7z.001" ] && return 0
 
+    xrc p7z
+
     (
         cd bin && {
-
             p7z a "$target_name.7z" "$target_name"
 
             local size
             size="$(wc -c "$target_name.7z" | awk '{ print $1; }')"
 
-            echo "------------\n$size"
-
             if [ "$size" -ge 1024000 ]; then
                 rm "$target_name.7z"
 
-                p7z -v970k a "$target_name.7z" "$target_name"
-                xrc p7z
                 p7z -v970k a "$target_name.7z" "$target_name"
                 ls $target_name.7z* | wc -l | tr -cd '0-9' > "$target_name.7z"
             fi
